@@ -25,6 +25,7 @@ const client = new AoiClient({
 
 client.variables ({
     points: 0,
+    license: Plata,
 }, "racerstats")
 
 client.loadCommands("./commands");
