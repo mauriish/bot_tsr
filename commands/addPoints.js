@@ -4,7 +4,7 @@ module.exports = {
 
 $setUserVar[points;$sum[$getUserVar[points;$mentioned[1];;racerstats];$message[2]];$mentioned[1];;racerstats]
 
-$if[$getUserVar[points;$mentioned[1];;racerstats] >= 100;
+$if[$sum[$getUserVar[points;$mentioned[1];;racerstats];$message[2]] => 100;
 $giveRole[$guildID;$mentioned[1];1442350209958023198] 
 $setUserVar[license;Oro;$mentioned[1];;racerstats]
 $description[1;Ascendiste a <@&1442350209958023198>!! 
