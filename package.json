@@ -1,0 +1,17 @@
+{
+  "name": "discord_tsr",
+  "version": "1.0.0",
+  "description": "Bot AOI.js mantenido 24/7",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@aoijs/aoi.db": "^0.0.0",
+    "aoi.js": "^6.11.1",
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
+  }
+}

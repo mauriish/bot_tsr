@@ -1,0 +1,8 @@
+module.exports = {
+    name: "points",
+    code: `
+    $title[1;Licencia de Piloto de $username]
+    $description[1;Tienes **$getUserVar[points;$authorID;;racerstats]** puntos en tu licencia.]
+    $color[1;#2b76f0]
+  `
+};
