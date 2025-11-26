@@ -7,8 +7,8 @@ $setUserVar[points;$sum[$getUserVar[points;$mentioned[1];;racerstats];$message[2
 $if[$sum[$getUserVar[points;$mentioned[1];;racerstats];$message[2]] >= 100;
   $giveRole[$guildID;$mentioned[1];1442350209958023198]
   $setUserVar[license;Oro;$mentioned[1];;racerstats]
-  $description[;Ascendiste a <@&1442350209958023198>!! 
+  $description[1;Ascendiste a <@&1442350209958023198>!! 
   ✅ Agregaste **$message[2]** puntos a **<@$mentioned[1]>**, ahora tiene **$sum[$getUserVar[points;$mentioned[1];;racerstats];$message[2]]** puntos];
-  $description[;✅ Agregaste **$message[2]** puntos a **<@$mentioned[1]>**, ahora tiene **$sum[$getUserVar[points;$mentioned[1];;racerstats];$message[2]]** puntos]
+  $description[2;✅ Agregaste **$message[2]** puntos a **<@$mentioned[1]>**, ahora tiene **$sum[$getUserVar[points;$mentioned[1];;racerstats];$message[2]]** puntos]
 ]`
 }
