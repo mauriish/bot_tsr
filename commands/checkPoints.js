@@ -34,7 +34,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setTitle(`Licencia de piloto de **${username}**`)
-            .setDescription(`**${username}** tiene ${points} puntos en su licencia`)
+            .setDescription(`**${username}** tiene ${profileData.points} puntos en su licencia`)
             .setColor(0x346beb);
 
         message.channel.send({ embeds: [embed] });
