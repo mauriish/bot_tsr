@@ -3,18 +3,19 @@ const profileModel = require("../models/profileSchema");
 
 module.exports = {
     name: "points",
-    aliases: ["pts"], // Alias para el comando
+    aliases: ["pts"],
     description: "Muestra cuántos puntos tiene un usuario o tú mismo",
     async execute(message, args) {
 
         // Determinar usuario objetivo
         const targetUser = message.mentions.users.first() || message.author;
 
-        // Buscar o crear profileData del usuario objetivo
+        // Buscar profileData del usuario objetivo
         let profileData;
         try {
             profileData = await profileModel.findOne({ userId: targetUser.id });
 
+            // Si no existe perfil, solo entonces lo creamos
             if (!profileData) {
                 profileData = await profileModel.create({
                     userId: targetUser.id,
@@ -27,7 +28,8 @@ module.exports = {
             return message.reply("Ocurrió un error al cargar el perfil del usuario.");
         }
 
-        const points = profileData.points || 0;
+        // Asegurarnos de leer los puntos correctos
+        const points = profileData.points ?? 0; // Si es undefined, poner 0
         const username = targetUser.username;
 
         const embed = new EmbedBuilder()
