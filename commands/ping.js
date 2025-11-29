@@ -10,8 +10,8 @@ module.exports = {
         const embed  = new EmbedBuilder()
         .setTitle("Pong!!")
         .setDescription(`Mi ping es **${ping}ms**`)
-        .setColor(ff0000)
+        .setColor(0xffffff)
 
-        message.channe.send({ embeds: [embed] })
+        message.channel.send({ embeds: [embed] })
     }
 };
