@@ -1,46 +1,44 @@
 require('dotenv').config();
-console.log("Token en env:", process.env.botK ? "DEFINIDO" : "NO DEFINIDO");
 const express = require('express');
-const db = require("@aoijs/aoi.db");
-const { AoiClient } = require('aoi.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 
+// Comprobar token
 if (!process.env.botK) {
     console.error("La variable de entorno botK no está definida.");
     process.exit(1);
 }
 
-const client = new AoiClient({
-    token: process.env.botK, 
-    prefix: "!", 
-    intents: ["MessageContent", "Guilds", "GuildMessages"],
-    events: ["onMessage", "onInteractionCreate"],
-    database: {
-        type: "aoi.db",
-        db: db,
-        dbType: "KeyValue",
-        tables: ["main", "racerstats"],
-        securityKey: "a-32-characters-long-string-here"
+console.log("Token en env:", process.env.botK ? "DEFINIDO" : "NO DEFINIDO");
+
+// Crear cliente de Discord
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent
+    ]
+});
+
+// Evento ready
+client.once('ready', () => {
+    console.log(`Bot iniciado como ${client.user.tag}`);
+});
+
+// Comando !ping
+client.on('messageCreate', (message) => {
+    if (message.author.bot) return;
+
+    if (message.content.toLowerCase() === "!ping") {
+        message.reply(`Pong!`);
     }
 });
 
-client.variables ({
-    points: 0,
-    license: "Plata",
-}, "racerstats")
+// Conectar con Discord
+client.login(process.env.botK);
 
-client.loadCommands("./commands");
-
-client.command({
-    name: "ping",
-    code: `Pong! $pingms`
-});
-
-
-
+// Servidor Express para mantener el bot activo
 const app = express();
 app.get("/", (req, res) => res.send("Bot activo"));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
-
-console.log("Bot iniciado");
