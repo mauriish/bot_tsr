@@ -1,36 +1,40 @@
-const { EmbedBuilder } = require("@discordjs/builders");
+const { EmbedBuilder } = require("discord.js");
 const profileModel = require("../models/profileSchema");
 
 module.exports = {
     name: "points",
-    description: "Muestra cuántos puntos tiene un usuario",
-    async execute(message, args, profileData) {
+    aliases: ["pts"], // Alias para el comando
+    description: "Muestra cuántos puntos tiene un usuario o tú mismo",
+    async execute(message, args) {
 
-        // ⚠ Si por algún motivo profileData no llega, lo buscamos
-        if (!profileData) {
-            try {
-                profileData = await profileModel.findOne({ userId: message.author.id });
+        // Determinar usuario objetivo
+        const targetUser = message.mentions.users.first() || message.author;
 
-                if (!profileData) {
-                    profileData = await profileModel.create({
-                        userId: message.author.id,
-                        serverId: message.guild.id,
-                    });
-                }
-            } catch (err) {
-                console.log(err);
-                return message.reply("Ocurrió un error al cargar tu perfil.");
+        // Buscar o crear profileData del usuario objetivo
+        let profileData;
+        try {
+            profileData = await profileModel.findOne({ userId: targetUser.id });
+
+            if (!profileData) {
+                profileData = await profileModel.create({
+                    userId: targetUser.id,
+                    serverId: message.guild.id,
+                    points: 0
+                });
             }
+        } catch (err) {
+            console.log(err);
+            return message.reply("Ocurrió un error al cargar el perfil del usuario.");
         }
 
-        const { points } = profileData;
-        const username = message.author.username;
+        const points = profileData.points || 0;
+        const username = targetUser.username;
 
         const embed = new EmbedBuilder()
-        .setTitle(`Licencia de piloto de **${username}**`)
-        .setDescription(`**${username}** tiene ${points} puntos en su licencia`)
-        .setColor(0x346beb)
+            .setTitle(`Licencia de piloto de **${username}**`)
+            .setDescription(`**${username}** tiene ${points} puntos en su licencia`)
+            .setColor(0x346beb);
 
-        message.channel.send({ embeds: [embed] })
+        message.channel.send({ embeds: [embed] });
     }
-}
+};
