@@ -10,43 +10,46 @@ module.exports = {
         }
 
         const targetUser = message.mentions.users.first();
-        if(!targetUser) {
+        if (!targetUser) {
             return message.reply("Debes mencionar a un usuario para agregar puntos.");
         }
 
-        if (!args[1] || isNaN(args[1])) {
-            return message.reply("Debes indicar la cantidad de puntos a agregar. Ejemplo: !add @usuario 50");
+        if (!args[1] || isNaN(args[1]) || parseInt(args[1]) <= 0) {
+            return message.reply("Debes indicar una cantidad válida de puntos a agregar. Ejemplo: !add @usuario 50");
         }
 
         const pointsToAdd = parseInt(args[1]);
 
-        // Buscar o crear perfil del usuario mencionado
-        if (!profileData) {
-            try {
-                profileData = await profileModel.findOne({ userId: targetUser.id });
+        try {
+            // 🔹 SIEMPRE buscar los datos actualizados de la base de datos
+            let userProfile = await profileModel.findOne({ 
+                userId: targetUser.id,
+                serverId: message.guild.id 
+            });
 
-                if (!profileData) {
-                    profileData = await profileModel.create({
-                        userId: targetUser.id, // 🔹 CORREGIDO
-                        serverId: message.guild.id,
-                        points: 0
-                    });
-                }
-            } catch (err) {
-                console.log(err);
-                return message.reply("Ocurrió un error al cargar el perfil.");
+            if (!userProfile) {
+                userProfile = await profileModel.create({
+                    userId: targetUser.id,
+                    serverId: message.guild.id,
+                    points: pointsToAdd
+                });
+            } else {
+                // 🔹 Usar los datos FRESCOS de la base de datos, no el profileData del parámetro
+                userProfile.points += pointsToAdd;
+                await userProfile.save();
             }
+
+            const embed = new EmbedBuilder()
+                .setTitle("Puntos Agregados!!")
+                .setDescription(`Se han agregado ${pointsToAdd} puntos a <@${targetUser.id}>.\nAhora tiene ${userProfile.points} puntos.`)
+                .setColor(0x346beb)
+                .setTimestamp();
+
+            await message.channel.send({ embeds: [embed] });
+
+        } catch (err) {
+            console.error("Error en comando add:", err);
+            return message.reply("Ocurrió un error al procesar la solicitud.");
         }
-
-        // Sumar puntos
-        profileData.points = (profileData.points || 0) + pointsToAdd;
-        await profileData.save(); // 🔹 MUY IMPORTANTE: guardar cambios en la DB
-
-        const embed = new EmbedBuilder()
-            .setTitle(`Puntos Agregados!!`)
-            .setDescription(`Se han agregado ${pointsToAdd} puntos a <@${targetUser.id}>.\nAhora tiene ${profileData.points}`)
-            .setColor(0x346beb);
-
-        message.channel.send({ embeds: [embed] });
     }
 };
