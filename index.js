@@ -8,7 +8,7 @@ const commands = new Map();
 const prefix = "!";
 const profileModel = require("./models/profileSchema");
 
-const { MONGODB_SRV: database } = process.env;
+const database = process.env.MONGODB_SRV;
 
 // Comprobar token
 if (!process.env.botK) {
@@ -68,6 +68,11 @@ client.on('messageCreate', async message => {
 client.once('clientReady', () => {
     console.log(`Bot iniciado como ${client.user.tag}`);
 });
+
+if (!database) {
+    console.error("La variable MONGODB_SRV no está definida.");
+    process.exit(1);
+}
 
 // Conectar con MongoDB
 mongoose.connect(database)
