@@ -1,6 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const { Client, GatewayIntentBits } = require('discord.js');
+const fs = require("fs");
+const commands = new Map();
+const prefix = "!"
+
+
 
 // Comprobar token
 if (!process.env.botK) {
@@ -19,19 +24,32 @@ const client = new Client({
     ]
 });
 
+client.on('messageCreate', message => {
+    if (message.author.bot) return;
+
+    if(!message.content.startsWith(prefix)) return;
+
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const commandName = args.shift().toLowerCase();
+
+    if (commands.has(commandName)) {
+        commands.get(commandName).execute(message, args);
+    }
+});
+
 // Evento ready
-client.once('ready', () => {
+client.once('clientReady', () => {
     console.log(`Bot iniciado como ${client.user.tag}`);
 });
 
-// Comando !ping
-client.on('messageCreate', (message) => {
-    if (message.author.bot) return;
+// Command handler
 
-    if (message.content.toLowerCase() === "!ping") {
-        message.reply(`Pong!`);
-    }
-});
+fs.readdirSync('./commands')
+  .filter(file => file.endsWith('.js'))
+  .forEach(file => {
+      const cmd = require(`./commands/${file}`);
+      commands.set(cmd.name, cmd);
+  });
 
 // Conectar con Discord
 client.login(process.env.botK);
