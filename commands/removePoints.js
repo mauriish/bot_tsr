@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const profileModel = require("../models/profileSchema");
-const pointsConfig = require("../config/pointsConfig");
+const pointsConfig = require("../config/pointsconfig");
 
 module.exports = {
     name: "remove",
