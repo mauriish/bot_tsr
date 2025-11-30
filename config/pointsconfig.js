@@ -32,7 +32,6 @@ module.exports = {
         
         return this.levels["0"];
     },
-
     getRoleLevels() {
         const roleLevels = {};
         Object.keys(this.levels).forEach(level => {
