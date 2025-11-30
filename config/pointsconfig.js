@@ -1,4 +1,4 @@
-// config/pointsConfig.js
+// config/pointsconfig.js
 module.exports = {
     levels: {
         "1000": { 
@@ -32,6 +32,7 @@ module.exports = {
         
         return this.levels["0"];
     },
+
     getRoleLevels() {
         const roleLevels = {};
         Object.keys(this.levels).forEach(level => {
