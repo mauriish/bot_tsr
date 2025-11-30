@@ -1,22 +1,26 @@
 require('dotenv').config();
-const { EmbedBuilder } = require('discord.js');
-const express = require('express');
 const { Client, GatewayIntentBits } = require('discord.js');
 const mongoose = require("mongoose");
 const fs = require("fs");
+const express = require('express');
+
 const commands = new Map();
 const prefix = "!";
 const profileModel = require("./models/profileSchema");
 
 const database = process.env.MONGODB_SRV;
+const token = process.env.botK;
 
-// Comprobar token
-if (!process.env.botK) {
+// Validar variables de entorno
+if (!token) {
     console.error("La variable de entorno botK no está definida.");
     process.exit(1);
 }
 
-console.log("Token en env:", process.env.botK ? "DEFINIDO" : "NO DEFINIDO");
+if (!database) {
+    console.error("La variable MONGODB_SRV no está definida.");
+    process.exit(1);
+}
 
 // Crear cliente de Discord
 const client = new Client({
@@ -27,38 +31,42 @@ const client = new Client({
     ]
 });
 
-// CARGAR COMANDOS
+// Cargar comandos
 fs.readdirSync('./commands')
     .filter(file => file.endsWith('.js'))
     .forEach(file => {
-        const cmd = require(`./commands/${file}`);
-        commands.set(cmd.name, cmd);
+        const command = require(`./commands/${file}`);
+        commands.set(command.name, command);
     });
 
-// ÚNICO EVENTO messageCreate (NO DUPLICADO)
+// Evento messageCreate
 client.on('messageCreate', async message => {
-    if (message.author.bot) return;
-    if (!message.content.startsWith(prefix)) return;
+    if (message.author.bot || !message.content.startsWith(prefix)) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    // CARGAR O CREAR PROFILEDATA AQUÍ
+    // Cargar o crear perfil del usuario
     let profileData;
     try {
-        profileData = await profileModel.findOne({ userId: message.author.id });
+        profileData = await profileModel.findOne({ 
+            userId: message.author.id,
+            serverId: message.guild.id 
+        });
 
         if (!profileData) {
             profileData = await profileModel.create({
                 userId: message.author.id,
                 serverId: message.guild.id,
-                points: 0,
+                points: 0
             });
         }
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.error("Error al cargar perfil:", error);
+        return;
     }
 
+    // Ejecutar comando
     if (commands.has(commandName)) {
         commands.get(commandName).execute(message, args, profileData);
     }
@@ -69,20 +77,15 @@ client.once('clientReady', () => {
     console.log(`Bot iniciado como ${client.user.tag}`);
 });
 
-if (!database) {
-    console.error("La variable MONGODB_SRV no está definida.");
-    process.exit(1);
-}
-
-// Conectar con MongoDB
+// Conectar a MongoDB
 mongoose.connect(database)
-    .then(() => console.log("Connected to DB"))
-    .catch(err => console.log(err));
+    .then(() => console.log("Conectado a la base de datos"))
+    .catch(error => console.error("Error de conexión a DB:", error));
 
-// Conectar con Discord
-client.login(process.env.botK);
+// Conectar a Discord
+client.login(token);
 
-// Servidor express para mantener activo
+// Servidor express
 const app = express();
 app.get("/", (req, res) => res.send("Bot activo"));
 const PORT = process.env.PORT || 3000;
