@@ -35,8 +35,13 @@ const client = new Client({
 fs.readdirSync('./commands')
     .filter(file => file.endsWith('.js'))
     .forEach(file => {
-        const command = require(`./commands/${file}`);
-        commands.set(command.name, command);
+        try {
+            const command = require(`./commands/${file}`);
+            commands.set(command.name, command);
+            console.log(`Comando cargado: ${command.name}`);
+        } catch (error) {
+            console.error(`Error al cargar comando ${file}:`, error.message);
+        }
     });
 
 // Evento messageCreate
@@ -68,13 +73,19 @@ client.on('messageCreate', async message => {
 
     // Ejecutar comando
     if (commands.has(commandName)) {
-        commands.get(commandName).execute(message, args, profileData);
+        try {
+            await commands.get(commandName).execute(message, args, profileData);
+        } catch (error) {
+            console.error(`Error ejecutando comando ${commandName}:`, error);
+            await message.reply("Ocurrió un error al ejecutar el comando.");
+        }
     }
 });
 
 // Evento ready
-client.once('clientReady', () => {
+client.once('ready', () => {
     console.log(`Bot iniciado como ${client.user.tag}`);
+    console.log(`Conectado a ${client.guilds.cache.size} servidores`);
 });
 
 // Conectar a MongoDB
@@ -83,10 +94,89 @@ mongoose.connect(database)
     .catch(error => console.error("Error de conexión a DB:", error));
 
 // Conectar a Discord
-client.login(token);
+client.login(token).catch(error => {
+    console.error("Error al conectar con Discord:", error);
+    process.exit(1);
+});
 
-// Servidor express
+// Servidor express para mantener activo
 const app = express();
-app.get("/", (req, res) => res.send("Bot activo"));
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor escuchando en puerto ${PORT}`));
+
+// Middleware para logs
+app.use((req, res, next) => {
+    console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Endpoint principal
+app.get("/", (req, res) => {
+    res.send("Bot TSR activo - Sistema de puntos de licencia");
+});
+
+// Endpoint para UptimeRobot
+app.get("/ping", (req, res) => {
+    res.status(200).send("OK");
+    console.log(`[${new Date().toLocaleTimeString()}] Ping recibido de UptimeRobot`);
+});
+
+// Endpoint de salud
+app.get("/health", (req, res) => {
+    const botStatus = client.isReady() ? "online" : "connecting";
+    const botName = client.user?.tag || "conectando...";
+    
+    res.json({ 
+        status: "operational",
+        bot: botStatus,
+        botName: botName,
+        timestamp: new Date().toISOString(),
+        uptime: `${Math.floor(process.uptime())} segundos`,
+        commands: Array.from(commands.keys())
+    });
+});
+
+// Endpoint de info
+app.get("/info", (req, res) => {
+    res.json({
+        name: "TSR Bot",
+        description: "Sistema de puntos de licencia para TSR",
+        endpoints: {
+            root: "/",
+            ping: "/ping (para UptimeRobot)",
+            health: "/health",
+            info: "/info"
+        },
+        url: "https://bot-tsr.onrender.com"
+    });
+});
+
+// Manejar errores 404
+app.use((req, res) => {
+    res.status(404).send("Endpoint no encontrado");
+});
+
+// Iniciar servidor
+app.listen(PORT, () => {
+    console.log(`Servidor escuchando en puerto ${PORT}`);
+    console.log(`URL pública: https://bot-tsr.onrender.com`);
+    console.log(`Endpoint para UptimeRobot: https://bot-tsr.onrender.com/ping`);
+    console.log(`Endpoint de salud: https://bot-tsr.onrender.com/health`);
+    console.log(`Ping automático configurado cada 4 minutos`);
+});
+
+// Ping automático interno cada 4 minutos (Render apaga después de 15 minutos de inactividad)
+setInterval(() => {
+    const now = new Date();
+    console.log(`[${now.toLocaleTimeString()}] Ping automático interno`);
+    
+    if (client.isReady()) {
+        console.log(`[${now.toLocaleTimeString()}] Bot activo: ${client.user.tag}`);
+    }
+}, 4 * 60 * 1000); // 4 minutos
+
+// Manejar cierre limpio
+process.on('SIGINT', () => {
+    console.log('Recibida señal SIGINT. Cerrando...');
+    client.destroy();
+    process.exit(0);
+});
