@@ -5,7 +5,7 @@ module.exports = {
     name: "ping",
     description: "Shows the bot ping",
     execute(message, args) {
-        const ping = Math.round(message.client.ws.ping); // Ping log
+        const ping = Math.round(message.client.ws.ping); 
 
         const embed  = new EmbedBuilder()
         .setTitle("Pong!!")

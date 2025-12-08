@@ -50,7 +50,7 @@ module.exports = {
             let assignedRole = null;
             let removedRoles = [];
 
-            // **REMOVER TODOS LOS ROLES QUE YA NO CORRESPONDEN**
+
             for (const level of sortedLevels) {
                 const roleId = roleLevels[level];
                 const role = message.guild.roles.cache.get(roleId);
@@ -61,7 +61,7 @@ module.exports = {
                 }
             }
 
-            // **ASIGNAR EL ROL CORRESPONDIENTE AL NUEVO NIVEL (SOLO EL MÁS ALTO)**
+
             for (const level of sortedLevels) {
                 if (newPoints >= parseInt(level)) {
                     const roleId = roleLevels[level];
@@ -71,7 +71,7 @@ module.exports = {
                         await member.roles.add(roleId);
                         assignedRole = role;
                     }
-                    break; // Solo asignar el rol más alto
+                    break;
                 }
             }
 
@@ -90,7 +90,7 @@ module.exports = {
                 });
             }
 
-            // **MOSTRAR ROLES REMOVIDOS SI HAY MÁS DE UNO**
+
             if (removedRoles.length > 0) {
                 const removedRoleNames = removedRoles.map(role => `<@&${role.id}>`).join(', ');
                 embed.addFields({
@@ -100,7 +100,7 @@ module.exports = {
                 });
             }
 
-            // **MOSTRAR NUEVA LICENCIA SI SE ASIGNÓ**
+
             if (assignedRole) {
                 embed.addFields({
                     name: "**Nueva Licencia**",

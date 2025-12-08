@@ -46,7 +46,6 @@ module.exports = {
             const newLevel = pointsConfig.getLevel(newPoints);
             const roleLevels = pointsConfig.getRoleLevels();
 
-            // **DETERMINAR ROLES ACTUAL Y ANTERIOR**
             const getCurrentRoleId = (points) => {
                 const sortedLevels = Object.keys(roleLevels).sort((a, b) => b - a);
                 for (const level of sortedLevels) {
@@ -60,25 +59,25 @@ module.exports = {
             const oldRoleId = getCurrentRoleId(oldPoints);
             const newRoleId = getCurrentRoleId(newPoints);
 
-            // **GESTIONAR CAMBIOS DE ROLES - REMOVER Y ASIGNAR**
+
             let assignedRole = null;
             let removedRole = null;
 
-            // **REMOVER ROL ANTERIOR SI ES DIFERENTE AL NUEVO**
+
             if (oldRoleId && oldRoleId !== newRoleId && member.roles.cache.has(oldRoleId)) {
                 const oldRole = message.guild.roles.cache.get(oldRoleId);
                 await member.roles.remove(oldRoleId);
                 removedRole = oldRole;
             }
 
-            // **ASIGNAR NUEVO ROL SI ES DIFERENTE AL ANTERIOR**
+
             if (newRoleId && newRoleId !== oldRoleId && !member.roles.cache.has(newRoleId)) {
                 const newRole = message.guild.roles.cache.get(newRoleId);
                 await member.roles.add(newRoleId);
                 assignedRole = newRole;
             }
 
-            // **CONSTRUIR EMBED**
+
             const embed = new EmbedBuilder()
                 .setTitle("**Puntos Agregados!!**")
                 .setDescription(`Se han agregado **${pointsToAdd}** puntos a <@${targetUser.id}>.\nAhora tiene **${newPoints}** puntos.`)
@@ -86,7 +85,7 @@ module.exports = {
                 .setThumbnail(targetUser.displayAvatarURL({ format: 'png', dynamic: true }))
                 .setTimestamp();
 
-            // **MOSTRAR NUEVA LICENCIA SI SE ASIGNÓ**
+
             if (assignedRole) {
                 embed.addFields({
                     name: "**Nueva Licencia!!**",
@@ -95,7 +94,7 @@ module.exports = {
                 });
             }
 
-            // **MOSTRAR SI SE REMOVIÓ UNA LICENCIA**
+
             if (removedRole && !assignedRole) {
                 embed.addFields({
                     name: "**Licencia Removida**",
