@@ -31,7 +31,7 @@ const CAR_LIST = [
     { tag: 'astongt4', name: 'Aston Martin Vantage GT4', category: 'GT4' },
 
     // LMP
-    { tag: 'lmp2', name: 'ORECA 07 LMP2', category: 'LMP2' },
+    { tag: 'lmp2', name: 'Dallara P217', category: 'LMP2' },
     { tag: 'lmp3', name: 'Ligier JS P320 LMP3', category: 'LMP3' },
 
     // Indycar

@@ -60,15 +60,15 @@ const PAGES = [
                     "`porschegt4` — Porsche 718 Cayman GT4\n" +
                     "`mclarengt4` — McLaren 570S GT4\n" +
                     "`mercedesgt4` — Mercedes-AMG GT4\n" +
-                    "`bmwgt4` — BMW M4 GT4\n" +
+                    "`m4gt4` — BMW M4 GT4\n" +
                     "`fordgt4` — Ford Mustang GT4\n" +
-                    "`amgt4` — Aston Martin Vantage GT4\n",
+                    "`astongt4` — Aston Martin Vantage GT4\n",
                 inline: false
             },
             {
                 name: "**⚡ LMP2 / LMP3**",
                 value:
-                    "`lmp2` — ORECA 07 LMP2\n" +
+                    "`lmp2` — Dallara P217\n" +
                     "`lmp3` — Ligier JS P320 LMP3\n",
                 inline: false
             },
@@ -123,11 +123,11 @@ const PAGES = [
                     "`porschegt4` — Porsche 718 Cayman GT4\n" +
                     "`amgt4` — Aston Martin Vantage GT4\n" +
                     "`mercedesgt4` — Mercedes-AMG GT4\n" +
-                    "`bmwgt4` — BMW M4 GT4\n" +
+                    "`m4gt4` — BMW M4 GT4\n" +
                     "`hyutcr` — Hyundai Elantra N TCR\n" +
                     "`hontcr` — Honda Civic Type R TCR\n" +
                     "`audtcr` — Audi RS3 LMS TCR\n" +
-                    "`bm2m2` — BMW M2 CS Racing\n",
+                    "`bmwm2` — BMW M2 CS Racing\n",
                 inline: false
             }
         ]
