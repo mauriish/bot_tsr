@@ -10,6 +10,11 @@ module.exports = {
 
     async execute(message, args, profileData) {
 
+         // Verificar rol
+    const ROL_ID = '1399813082406064299';
+    if (!message.member.roles.cache.has(ROL_ID)) {
+        return message.reply('❌ No tienes permisos para usar este comando.');}
+
         // !setup sin argumentos → muestra circuitos disponibles
         if (!args[0]) {
             let folders;
