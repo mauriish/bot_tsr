@@ -11,7 +11,7 @@ const CAR_LIST = [
     { tag: '499hy', name: 'Ferrari 499P', category: 'Hypercars' },
 
     // GT3
-    { tag: 'm4gt3', name: 'BMW M4 GT3', category: 'GT3' },
+    { tag: 'bmwgt3', name: 'BMW M4 GT3', category: 'GT3' },
     { tag: 'lambogt3', name: 'Lamborghini Huracán GT3 EVO2', category: 'GT3' },
     { tag: 'mercgt3', name: 'Mercedes-AMG GT3', category: 'GT3' },
     { tag: 'porschegt3', name: 'Porsche 911 GT3 R', category: 'GT3' },
@@ -28,7 +28,7 @@ const CAR_LIST = [
     { tag: 'mercedesgt4', name: 'Mercedes-AMG GT4', category: 'GT4' },
     { tag: 'bmwgt4', name: 'BMW M4 GT4', category: 'GT4' },
     { tag: 'fordgt4', name: 'Ford Mustang GT4', category: 'GT4' },
-    { tag: 'amgt4', name: 'Aston Martin Vantage GT4', category: 'GT4' },
+    { tag: 'astongt4', name: 'Aston Martin Vantage GT4', category: 'GT4' },
 
     // LMP
     { tag: 'lmp2', name: 'ORECA 07 LMP2', category: 'LMP2' },
@@ -55,7 +55,7 @@ const CAR_LIST = [
     { tag: 'hyutcr', name: 'Hyundai Elantra N TCR', category: 'NEC' },
     { tag: 'hontcr', name: 'Honda Civic Type R TCR', category: 'NEC' },
     { tag: 'audtcr', name: 'Audi RS3 LMS TCR', category: 'NEC' },
-    { tag: 'bm2m2', name: 'BMW M2 CS Racing', category: 'NEC' },
+    { tag: 'bmwm2', name: 'BMW M2 CS Racing', category: 'NEC' },
 ];
 
 module.exports = CAR_LIST;
