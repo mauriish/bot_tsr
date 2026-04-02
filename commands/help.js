@@ -2,14 +2,27 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("
 
 const PAGES = [
     {
+        title: "📊 Comandos de Puntos",
+        fields: [
+            {
+                name: "**📊 Comandos de Puntos**",
+                value:
+                    "**!add @usuario <cantidad>** — Agrega puntos a un usuario\n" +
+                    "**!remove @usuario <cantidad>** — Quita puntos a un usuario\n" +
+                    "**!points @usuario (@ opcional)** — Muestra los puntos de un usuario\n",
+                inline: false
+            }
+        ]
+    },
+    {
         title: "🏁 Comandos de Setups",
         fields: [
             {
                 name: "**🏁 Comandos de Setups** *(requiere rol de piloto)*",
                 value:
-                    "**!setup <tag>-<circuito>** — Descarga el setup de un auto en un circuito\n" +
-                    "**!autos** — Muestra todos los autos y si tienen setups disponibles\n" +
-                    "**!autos <tag>** — Muestra los circuitos disponibles de ese auto\n\n" +
+                    "**!circuitos** — Muestra todos los circuitos disponibles\n" +
+                    "**!circuitos <circuito>** — Muestra los autos disponibles en ese circuito\n" +
+                    "**!setup <tag>-<circuito>** — Descarga el setup de un auto\n\n" +
                     "Ejemplo: `!setup porschegt3-spa`\n",
                 inline: false
             }

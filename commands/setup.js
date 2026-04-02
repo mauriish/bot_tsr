@@ -35,52 +35,52 @@ module.exports = {
             );
         }
 
-        const carTag = input.substring(0, separador);      // ej: porschegt3
+        const carTag = input.substring(0, separador);       // ej: porschegt3
         const circuitName = input.substring(separador + 1); // ej: spa
-        const fileName = `${circuitName}.rar`;              // ej: spa.rar
+        const fileName = `${carTag}.rar`;                   // ej: porschegt3.rar
 
         const loadingMsg = await message.reply(`🔍 Buscando \`${carTag}\` en **${circuitName}**...`);
 
-        // Busca la carpeta del AUTO
-        let carFolder;
+        // Busca la carpeta del CIRCUITO
+        let circuitFolder;
         try {
-            carFolder = await findSubfolder(ROOT_FOLDER_ID, carTag);
+            circuitFolder = await findSubfolder(ROOT_FOLDER_ID, circuitName);
         } catch (error) {
             return loadingMsg.edit('❌ Error al conectar con Google Drive.');
         }
 
-        if (!carFolder) {
+        if (!circuitFolder) {
             return loadingMsg.edit(
-                `❌ No hay setups para \`${carTag}\`.\n` +
+                `❌ No existe el circuito \`${circuitName}\`.\n` +
                 `Usa \`!autos\` para ver los disponibles.`
             );
         }
 
-        // Busca el archivo del CIRCUITO dentro de la carpeta del auto
+        // Busca el archivo del AUTO dentro de la carpeta del circuito
         let files;
         try {
-            files = await listFiles(carFolder.id);
+            files = await listFiles(circuitFolder.id);
         } catch (error) {
-            return loadingMsg.edit('❌ Error al leer la carpeta del auto.');
+            return loadingMsg.edit('❌ Error al leer la carpeta del circuito.');
         }
 
         const file =
             files.find(f => f.name.toLowerCase() === fileName) ||
-            files.find(f => f.name.toLowerCase().includes(circuitName));
+            files.find(f => f.name.toLowerCase().includes(carTag));
 
         if (!file) {
-            const circuitos = files
+            const autos = files
                 .filter(f => f.name.endsWith('.rar'))
                 .map(f => `• \`${f.name.replace('.rar', '')}\``)
                 .join('\n');
 
             return loadingMsg.edit(
-                `❌ No hay setup de \`${carTag}\` en **${circuitName}**.\n\n` +
-                (circuitos ? `🏁 **Circuitos disponibles:**\n${circuitos}` : '')
+                `❌ No hay setup de \`${carTag}\` en **${circuitFolder.name}**.\n\n` +
+                (autos ? `🚗 **Autos disponibles en ${circuitFolder.name}:**\n${autos}` : '')
             );
         }
 
-        await loadingMsg.edit(`⬇️ Descargando \`${carTag}\` — ${circuitName}...`);
+        await loadingMsg.edit(`⬇️ Descargando \`${carTag}\` — ${circuitFolder.name}...`);
 
         let filePath;
         try {
@@ -94,10 +94,10 @@ module.exports = {
 
             if (sizeMB <= 8) {
                 const attachment = new AttachmentBuilder(filePath, { name: file.name });
-                await message.reply({ content: `✅ **Auto: __${carTag}__** PARA __${circuitName}__`, files: [attachment] });
+                await message.reply({ content: `✅ **${carTag}** — ${circuitFolder.name}`, files: [attachment] });
             } else {
                 await message.reply(
-                    `✅ **__${carTag}__** PARA __${circuitName}__ (${sizeMB.toFixed(1)}MB)\n` +
+                    `✅ **${carTag}** — ${circuitFolder.name} (${sizeMB.toFixed(1)}MB)\n` +
                     `📦 Archivo grande, descárgalo aquí:\n🔗 ${file.webViewLink}`
                 );
             }
