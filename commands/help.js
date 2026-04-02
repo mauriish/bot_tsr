@@ -9,6 +9,7 @@ const PAGES = [
                 value:
                     "**!circuitos** — Muestra todos los circuitos disponibles\n" +
                     "**!circuitos <circuito>** — Muestra los autos disponibles en ese circuito\n" +
+                    "**!find <tag>** — Muestra en qué circuitos hay setup para un auto\n" +
                     "**!setup <tag>-<circuito>** — Descarga el setup de un auto\n\n" +
                     "Ejemplo: `!setup porschegt3-spa`\n",
                 inline: false

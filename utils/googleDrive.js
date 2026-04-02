@@ -14,7 +14,7 @@ const drive = google.drive({ version: 'v3', auth });
 async function listFiles(folderId) {
     const response = await drive.files.list({
         q: `'${folderId}' in parents and trashed = false`,
-        fields: 'files(id, name, size, webViewLink, mimeType)',
+        fields: 'files(id, name, size, webViewLink, mimeType, createdTime)',  // agrega createdTime
         orderBy: 'name',
         pageSize: 100,
     });
