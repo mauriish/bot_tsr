@@ -111,7 +111,7 @@ app.use((req, res, next) => {
 
 // Endpoint principal
 app.get("/", (req, res) => {
-    res.send("Bot TSR activo - Sistema de puntos de licencia");
+    res.send("Bot TQM activo - Sistema de puntos de licencia");
 });
 
 // Endpoint para UptimeRobot
