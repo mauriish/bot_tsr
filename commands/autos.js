@@ -1,6 +1,6 @@
 const { listFiles, findSubfolder } = require('../utils/googleDrive');
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const CAR_LIST = require('../utils/carlist.js');
+const CAR_LIST = require('../utils/carList');
 
 const ROOT_FOLDER_ID = process.env.DRIVE_FOLDER_ID;
 const ROL_ID = '1399813082406064299';
@@ -53,9 +53,7 @@ module.exports = {
             }
 
             if (!subfolder) {
-                return loadingMsg.edit(
-                    `⏳ **${car.name}** aún no tiene setups cargados.`
-                );
+                return loadingMsg.edit(`⏳ **${car.name}** aún no tiene setups cargados.`);
             }
 
             let files;
@@ -87,7 +85,7 @@ module.exports = {
             });
         }
 
-        // !autos → lista todos los autos con al menos un setup en Drive
+        // !autos → lista todos los autos con disponibilidad real
         const loadingMsg = await message.reply(`🔍 Consultando Drive...`);
 
         let driveItems;
@@ -97,17 +95,28 @@ module.exports = {
             return loadingMsg.edit('❌ Error al conectar con Google Drive.');
         }
 
-        // Carpetas que existen en Drive
-        const availableFolders = new Set(
-            driveItems
-                .filter(f => f.mimeType === 'application/vnd.google-apps.folder')
-                .map(f => f.name.toLowerCase())
+        const folders = driveItems.filter(f => f.mimeType === 'application/vnd.google-apps.folder');
+
+        // Revisa si cada carpeta tiene al menos un .rar
+        const folderContents = await Promise.all(
+            folders.map(async folder => {
+                try {
+                    const files = await listFiles(folder.id);
+                    const hasRar = files.some(f => f.name.endsWith('.rar'));
+                    return { tag: folder.name.toLowerCase(), hasRar };
+                } catch {
+                    return { tag: folder.name.toLowerCase(), hasRar: false };
+                }
+            })
         );
 
-        // Marca cada auto como disponible o no
+        const availableTags = new Set(
+            folderContents.filter(f => f.hasRar).map(f => f.tag)
+        );
+
         const items = CAR_LIST.map(car => ({
             ...car,
-            available: availableFolders.has(car.tag)
+            available: availableTags.has(car.tag)
         }));
 
         const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
