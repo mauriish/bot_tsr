@@ -2,19 +2,6 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("
 
 const PAGES = [
     {
-        title: "📊 Comandos de Puntos",
-        fields: [
-            {
-                name: "**📊 Comandos de Puntos**",
-                value:
-                    "**!add @usuario <cantidad>** — Agrega puntos a un usuario\n" +
-                    "**!remove @usuario <cantidad>** — Quita puntos a un usuario\n" +
-                    "**!points @usuario (@ opcional)** — Muestra los puntos de un usuario\n",
-                inline: false
-            }
-        ]
-    },
-    {
         title: "🏁 Comandos de Setups",
         fields: [
             {

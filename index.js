@@ -168,16 +168,6 @@ app.listen(PORT, () => {
 // Después de app.listen(), agrega:
 console.log("Configura UptimeRobot con esta URL: https://bot-tsr.onrender.com/ping");
 
-// Ping automático más frecuente
-setInterval(() => {
-    const now = new Date();
-    console.log(`[${now.toLocaleTimeString()}] Ping automático - Bot activo`);
-    
-    // También puedes hacer un ping a ti mismo
-    fetch('https://bot-tsr.onrender.com/ping').catch(() => {
-        console.log(`[${now.toLocaleTimeString()}] Error en auto-ping`);
-    });
-}, 3 * 60 * 1000); // Cada 3 minutos
 // Manejar cierre limpio
 process.on('SIGINT', () => {
     console.log('Recibida señal SIGINT. Cerrando...');
