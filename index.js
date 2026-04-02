@@ -83,7 +83,7 @@ client.on('messageCreate', async message => {
 });
 
 // Evento ready
-client.once('clientReady', () => {
+client.once('ready', () => {
     console.log(`Bot iniciado como ${client.user.tag}`);
     console.log(`Conectado a ${client.guilds.cache.size} servidores`);
 });
