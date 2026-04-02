@@ -11,7 +11,7 @@ const CAR_LIST = [
     { tag: '499hy', name: 'Ferrari 499P', category: 'Hypercars' },
 
     // GT3
-    { tag: 'bmwgt3', name: 'BMW M4 GT3', category: 'GT3' },
+    { tag: 'm4gt3', name: 'BMW M4 GT3', category: 'GT3' },
     { tag: 'lambogt3', name: 'Lamborghini Huracán GT3 EVO2', category: 'GT3' },
     { tag: 'mercgt3', name: 'Mercedes-AMG GT3', category: 'GT3' },
     { tag: 'porschegt3', name: 'Porsche 911 GT3 R', category: 'GT3' },
@@ -26,7 +26,7 @@ const CAR_LIST = [
     { tag: 'porschegt4', name: 'Porsche 718 Cayman GT4', category: 'GT4' },
     { tag: 'mclarengt4', name: 'McLaren 570S GT4', category: 'GT4' },
     { tag: 'mercedesgt4', name: 'Mercedes-AMG GT4', category: 'GT4' },
-    { tag: 'bmwgt4', name: 'BMW M4 GT4', category: 'GT4' },
+    { tag: 'm4gt4', name: 'BMW M4 GT4', category: 'GT4' },
     { tag: 'fordgt4', name: 'Ford Mustang GT4', category: 'GT4' },
     { tag: 'astongt4', name: 'Aston Martin Vantage GT4', category: 'GT4' },
 
