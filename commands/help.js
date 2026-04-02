@@ -15,7 +15,8 @@ module.exports = {
                     value: 
                         "**!add @usuario <cantidad>** - Agrega puntos a un usuario\n" +
                         "**!remove @usuario <cantidad>** - Quita puntos a un usuario\n" +
-                        "**!points @usuario (@ opcional) ** - Muestra los puntos de un usuario\n",
+                        "**!points @usuario (@ opcional) ** - Muestra los puntos de un usuario\n" +
+                        "**!setup <auto>-<circuito>** - Descarga un setup desde Google Drive, requiere el rol de piloto\n", 
                     inline: false
                 },
             )
