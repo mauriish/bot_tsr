@@ -15,8 +15,15 @@ module.exports = {
                     value: 
                         "**!add @usuario <cantidad>** - Agrega puntos a un usuario\n" +
                         "**!remove @usuario <cantidad>** - Quita puntos a un usuario\n" +
-                        "**!points @usuario (@ opcional) ** - Muestra los puntos de un usuario\n" +
-                        "**!setup <auto>-<circuito>** - Descarga un setup desde Google Drive, requiere el rol de piloto\n", 
+                        "**!points @usuario (@ opcional)** - Muestra los puntos de un usuario\n",
+                    inline: false
+                },
+                {
+                    name: "**🏁 Comandos de Setups** *(requiere rol de piloto)*",
+                    value:
+                        "**!setup <auto>-<circuito>** - Descarga un setup desde Google Drive\n" +
+                        "**!circuitos** - Muestra todos los circuitos disponibles\n" +
+                        "**!autos <circuito>** - Muestra los autos disponibles en un circuito\n",
                     inline: false
                 },
             )
