@@ -52,7 +52,7 @@ module.exports = {
         if (!circuitFolder) {
             return loadingMsg.edit(
                 `❌ No existe el circuito \`${circuitName}\`.\n` +
-                `Usa \`!find <auto>\` para ver los disponibles.`
+                `Usa \`!circuitos \` para ver los disponibles.`
             );
         }
 
